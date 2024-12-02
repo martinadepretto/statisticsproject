@@ -1,0 +1,350 @@
+library(reshape2)
+library(ggplot2)
+
+#####BIVARIATE ANALYSIS KERALA####
+
+##ASSOCIATION BETWEEN MONTHLY PRECIPITATION AND YEARS##
+#Let's classify the monthly precipitations separately in 5 classes,
+#through the values of median, max, min, first and third quartile
+#january
+plot(kerala$jan)
+summary(kerala$jan)
+class_ker_jan <- as.factor(ifelse(kerala$jan < 1, "verylow", 
+                                  ifelse(kerala$jan < 4, "low", 
+                                         ifelse(kerala$jan < 12, "medium", 
+                                                ifelse(kerala$jan < 51, "high", "veryhigh")))))
+class_ker_jan <- factor(class_ker_jan, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#february
+plot(kerala$feb)
+summary(kerala$feb) 
+class_ker_feb <- as.factor(ifelse(kerala$feb < 2, "verylow", 
+                                  ifelse(kerala$feb < 7, "low", 
+                                         ifelse(kerala$feb < 15, "medium", 
+                                                ifelse(kerala$feb < 50, "high", "veryhigh")))))
+class_ker_feb <- factor(class_ker_feb, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#march
+plot(kerala$mar)
+#outliers are present, so we need to remove them
+summary(kerala$mar[-which(kerala$mar == 217.2)])
+class_ker_mar <- as.factor(ifelse(kerala$mar < 9, "verylow", 
+                                  ifelse(kerala$mar < 23, "low", 
+                                         ifelse(kerala$mar < 39, "medium", 
+                                                ifelse(kerala$mar < 83, "high", "veryhigh")))))
+class_ker_mar <- factor(class_ker_mar, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#april
+plot(kerala$apr)
+summary(kerala$apr) 
+class_ker_apr <- as.factor(ifelse(kerala$apr < 44, "verylow", 
+                                  ifelse(kerala$apr < 92, "low", 
+                                         ifelse(kerala$apr < 123, "medium", 
+                                                ifelse(kerala$apr < 187, "high", "veryhigh")))))
+class_ker_apr <- factor(class_ker_apr, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#may
+plot(kerala$may)
+summary(kerala$may) 
+class_ker_may <- as.factor(ifelse(kerala$may < 89, "verylow", 
+                                  ifelse(kerala$may < 155, "low", 
+                                         ifelse(kerala$may < 231, "medium", 
+                                                ifelse(kerala$may < 508, "high", "veryhigh")))))
+class_ker_may <- factor(class_ker_may, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#june
+plot(kerala$jun)
+summary(kerala$jun)
+class_ker_jun <- as.factor(ifelse(kerala$jun < 368, "verylow", 
+                                  ifelse(kerala$jun < 586, "low", 
+                                         ifelse(kerala$jun < 712, "medium", 
+                                                ifelse(kerala$jun < 945, "high", "veryhigh")))))
+class_ker_jun <- factor(class_ker_may, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#july
+plot(kerala$jul)
+sort(kerala$jul)
+summary(kerala$jul[-which(kerala$jul == 1526.5)])
+class_ker_jul <- as.factor(ifelse(kerala$jul < 353, "verylow", 
+                                  ifelse(kerala$jul < 615, "low", 
+                                         ifelse(kerala$jul < 761, "medium", 
+                                                ifelse(kerala$jul < 1070, "high", "veryhigh")))))
+class_ker_jul <- factor(class_ker_jul, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#august
+plot(kerala$aug)
+sort(kerala$aug)
+summary(kerala$aug[-which(kerala$aug > 900)])
+class_ker_aug <- as.factor(ifelse(kerala$aug < 247, "verylow", 
+                                  ifelse(kerala$aug < 349, "low", 
+                                         ifelse(kerala$aug < 436, "medium", 
+                                                ifelse(kerala$aug < 615, "high", "veryhigh")))))
+class_ker_aug <- factor(class_ker_aug, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#september
+plot(kerala$sep)
+summary(kerala$sep)
+class_ker_sep <- as.factor(ifelse(kerala$sep < 97, "verylow", 
+                                  ifelse(kerala$sep < 188, "low", 
+                                         ifelse(kerala$sep < 279, "medium", 
+                                                ifelse(kerala$sep < 430, "high", "veryhigh")))))
+class_ker_sep <- factor(class_ker_sep, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#october
+plot(kerala$oct)
+summary(kerala$oct)
+class_ker_oct <- as.factor(ifelse(kerala$oct < 146, "verylow", 
+                                  ifelse(kerala$oct < 254, "low", 
+                                         ifelse(kerala$oct < 320, "medium", 
+                                                ifelse(kerala$oct < 461, "high", "veryhigh")))))
+class_ker_oct <- factor(class_ker_oct, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#november
+plot(kerala$nov)
+summary(kerala$nov)
+class_ker_nov <- as.factor(ifelse(kerala$nov < 62, "verylow", 
+                                  ifelse(kerala$nov < 124, "low", 
+                                         ifelse(kerala$nov < 187, "medium", 
+                                                ifelse(kerala$nov < 293, "high", "veryhigh")))))
+class_ker_nov <- factor(class_ker_nov, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#december
+plot(kerala$dec)
+sort(kerala$dec)
+summary(kerala$dec[-which(kerala$dec == 202.3)])
+class_ker_dec <- as.factor(ifelse(kerala$dec < 5, "verylow", 
+                                  ifelse(kerala$dec < 21, "low", 
+                                         ifelse(kerala$dec < 42, "medium", 
+                                                ifelse(kerala$dec < 105, "high", "veryhigh")))))
+class_ker_dec <- factor(class_ker_dec, 
+                        levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+
+#create a data frame with the classification of each monthly precipitations, 
+#linking them with the years in which they happened
+class_ker <- data.frame(kerala$year, class_ker_jan, class_ker_feb, class_ker_mar, class_ker_apr,
+                        class_ker_may, class_ker_jun, class_ker_jul, class_ker_aug, class_ker_sep,
+                        class_ker_oct, class_ker_nov, class_ker_dec)
+#change the columns' name
+names(class_ker) <- c("year", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec")
+View(class_ker)
+
+#Create the contingency table with the absolute frequencies of the classes
+# to do so, we need to reunite the data in just 3 columns: year, month, level
+class_ker_long <- reshape2::melt(class_ker, id.vars = "year", 
+                                 variable.name = "month", value.name = "level")
+#create the contingency table
+ker_ct <- table(class_ker_long$year, class_ker_long$level)
+#arrange the columns in an increasing order
+ord_col <- c("verylow", "low", "medium", "high", "veryhigh")
+ker_ct[ , ord_col]
+# Convert the table into a data frame, to better visualize the absolute frequencies
+df_ker_ct <- as.data.frame.matrix(ker_ct[ , ord_col])
+View(df_ker_ct)
+
+#Through the contingency table, we can calculate the chi square,
+#to determine the level of association between the variables
+#Measure the chi square
+chisq.test(df_ker_ct)
+ker_chi <- 542.63
+#high value, the variables are associated
+
+#Measure the Cramer's V Index
+#to do that, we need the number of rows and columns, 
+# and the total number of observations
+r_k <- nrow(df_ker_ct)
+c_k <- ncol(df_ker_ct)
+n_k <- 115*12
+#calculate Cramer's V Index
+ker_cramer <- sqrt(ker_chi/(n_k*min(r_k-1, c_k-1))) #0.3135324
+#medium-low value, the variables are slightly associated 
+
+
+#Let's find the years characterized by extreme events of precipitations, both low and high
+#Years with really poor rainfall
+#to do that, we need to add a column cointaining the years from 1901 to 2015,
+# to associate them with the values of df_ker_ct
+df_ker_ct$year <- kerala$year 
+#now, we identify the years which frequency of "very low" and "low" classes is above 7
+df_ker_ct$year[which(df_ker_ct$verylow + df_ker_ct$low > 7)] 
+#These years represent periods in which it rained very little
+
+#Years with really intense rainfall
+#we identify the years which frequency of "very high" and "high" classes is above 7
+df_ker_ct$year[which(df_ker_ct$veryhigh + df_ker_ct$high > 7)] 
+#These years represent periods in which it rained plenty
+
+
+#########################################################
+#ASSOCIATION BETWEEN SEASONAL PRECIPITATIONS AND YEARS
+#The analysis is carried out by studying the years in periods of 30 years each,
+#and the seasons as the mean seasonal precipitations of those periods
+#The seasons were divided in: winter (January+February), 
+#                             spring (March+April+May), 
+#                             summer(June+July+August+September), 
+#                             autumn(October+November+December)
+#The years were divided in: y1 (1901-1930), 
+#                           y2 (1931-1960), 
+#                           y3 (1961-1990), 
+#                           y4 (1991-2015)
+
+#Calculate the seasonal mean of the precipitations, for each period
+#winter (January+February)
+##y1 
+ker_winter_y1 <- round(mean(c(kerala[1:30, 2], kerala[1:30, 3])), digits = 3)
+##y2
+ker_winter_y2 <- round(mean(c(kerala[31:60, 2], kerala[31:60, 3])), digits = 3)
+##y3
+ker_winter_y3 <- round(mean(c(kerala[61:90, 2], kerala[61:90, 3])), digits = 3)
+##y4
+ker_winter_y4 <- round(mean(c(kerala[91:115, 2], kerala[91:115, 3])), digits = 3)
+
+#spring (March+April+May)
+##y1 
+ker_spring_y1 <- round(mean(c(kerala[1:30, 4], kerala[1:30, 5], kerala[1:30, 6])), digits = 3)
+##y2
+ker_spring_y2 <- round(mean(c(kerala[31:60, 4], kerala[31:60, 5], kerala[31:60, 6])), digits = 3)
+##y3
+ker_spring_y3 <- round(mean(c(kerala[61:90, 4], kerala[61:90, 5], kerala[61:90, 6])), digits = 3)
+##y4
+ker_spring_y4 <- round(mean(c(kerala[91:115, 4], kerala[91:115, 5], kerala[91:115, 6])), digits = 3)
+
+#summer (June+July+August+September)
+##y1 
+ker_summer_y1 <- round(mean(c(kerala[1:30, 7], kerala[1:30, 8], kerala[1:30, 9], kerala[1:30, 10])), digits = 3)
+##y2
+ker_summer_y2 <- round(mean(c(kerala[31:60, 7], kerala[31:60, 8], kerala[31:60, 9], kerala[31:60, 10])), digits = 3)
+##y3
+ker_summer_y3 <- round(mean(c(kerala[61:90, 7], kerala[61:90, 8], kerala[61:90, 9], kerala[61:90, 10])), digits = 3)
+##y4
+ker_summer_y4 <- round(mean(c(kerala[91:115, 7], kerala[91:115, 8], kerala[91:115, 9], kerala[91:115, 10])), digits = 3)
+
+#autumn (October+November+December)
+##y1 
+ker_autumn_y1 <- round(mean(c(kerala[1:30, 11], kerala[1:30, 12], kerala[1:30, 13])), digits = 3)
+##y2
+ker_autumn_y2 <- round(mean(c(kerala[31:60, 11], kerala[31:60, 112], kerala[31:60, 13])), digits = 3)
+##y3
+ker_autumn_y3 <- round(mean(c(kerala[61:90, 11], kerala[61:90, 12], kerala[61:90, 13])), digits = 3)
+##y4
+ker_autumn_y4 <- round(mean(c(kerala[91:115, 11], kerala[91:115, 12], kerala[91:115, 13])), digits = 3)
+
+#create the data frame that puts together the seasonal mean precipitations and the periods
+df_ker_30y <- data.frame("Years"= c("1901-1930","1931-1960","1961-1990","1991-2015"), 
+                         "Winter"= c(ker_winter_y1, ker_winter_y2, ker_winter_y3, ker_winter_y4),
+                         "Spring"= c(ker_spring_y1, ker_spring_y2, ker_spring_y3, ker_spring_y4),
+                         "Summer"= c(ker_summer_y1, ker_summer_y2, ker_summer_y3, ker_summer_y4),
+                         "Autumn"= c(ker_autumn_y1, ker_autumn_y2, ker_autumn_y3, ker_autumn_y4))
+
+#Let's visualize the data in a histogram 
+# to do so, we need to reunite the data in just 3 columns: year, season, value
+df_ker_30y_long <- reshape2::melt(df_ker_30y, id.vars = "Years", 
+                                  variable.name = "Season", value.name = "Value")
+write.csv(df_ker_30y_long, "30y_ker_season class.J&K.csv", row.names = TRUE)
+
+#Create the histogram
+ggplot(df_ker_30y_long, aes(x = Season, y = Value, fill = Years)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Mean seasonal prec. every 30 years in Kerala", x = "Season", y = "Mean seasonal prec (mm)") +
+  theme_minimal()
+
+
+#CLASSIFICATION
+#Now, we can classify the seasonal mean precipitations in 2 classes,
+# choosing the median as the threshold
+#winter
+summary(df_ker_30y$Winter)
+class_ker_winter <- as.factor(ifelse(df_ker_30y$Winter < 13, "lower",
+                                     "higher"))
+class_ker_winter <- factor(class_ker_winter, levels = c("lower", "higher"))
+#spring
+summary(df_ker_30y$Spring)
+class_ker_spring <- as.factor(ifelse(df_ker_30y$Spring < 120, "lower",
+                                     "higher"))
+class_ker_spring <- factor(class_ker_spring, levels = c("lower", "higher"))
+#summer
+summary(df_ker_30y$Summer)
+class_ker_summer <- as.factor(ifelse(df_ker_30y$Summer < 503, "lower",
+                                     "higher"))
+class_ker_summer <- factor(class_ker_summer, levels = c("lower", "higher"))
+#autumn
+summary(df_ker_30y$Autumn)
+class_ker_autumn <- as.factor(ifelse(df_ker_30y$Autumn < 172, "lower",
+                                     "higher"))
+class_ker_autumn <- factor(class_ker_autumn, levels = c("lower", "higher"))
+
+#create a data frame with the classification of each seasonal precipitations, 
+# linking them with the periods in which they happened
+y30 <- c("1901-1930", "1931-1960", "1961-1990", "1991-2015")
+class_ker_y30 <- data.frame(y30, class_ker_winter, class_ker_spring, class_ker_summer, class_ker_autumn)
+#change the columns' name
+names(class_ker_y30) <- c("Period", "Winter", "Spring", "Summer", "Autumn")
+View(class_ker_y30)
+
+
+#Create the contingency table with the absolute frequencies of the classes
+# to do so, we need to reunite the data in just 3 columns: period, season, level
+class_ker_30y_long <- reshape2::melt(class_ker_y30, id.vars = "Period", 
+                                     variable.name = "Season", value.name = "Level")
+#create the contingency table
+ker_ct_30y <- table(class_ker_30y_long$Period, class_ker_30y_long$Level)
+# Convert the table into a data frame, to better visualize the absolute frequencies
+df_ker_ct_30y <- as.data.frame.matrix(ker_ct_30y)
+View(df_ker_ct_30y)
+#the periods were all pretty constant, except for the one from 1961 to 1990,
+# where a decrease in the seasonal mean precipitation was recorded
+
+#Through the contingency table, we can calculate the chi square,
+#to determine the level of association between the variables
+#Measure the chi square
+chisq.test(df_ker_ct_30y) 
+ker_30y_chi <- 6
+#value different from zero, the variables are associated
+#Measure the Cramer's V Index
+#to do that, we need the number of rows and columns, 
+# and the total number of observations
+r_k_30y <- nrow(df_ker_ct_30y)
+c_k_30y <- ncol(df_ker_ct_30y)
+n_k_30y <- 4*4
+#calculate Cramer's V Index
+ker_30y_cramer <- sqrt(ker_30y_chi/(n_k_30y*min(r_k_30y-1, c_k_30y-1))) #0.6123724
+#medium value, the variables are moderately associated 
+
+
+#As the variables "seasonal mean precipitation" and "periods of 30 years each" are associated in a way,
+# we are interested in analyzing if the association could be linear
+#Measure the covariance to find a linear association
+#As the two variables have different lengths, 
+# we calculate the covariance between the seasonal mean precipitations 
+# and the median of each period
+#calculate the median of the periods
+m_y1 <- median(1901:1930)
+m_y2 <- median(1931:1960)
+m_y3 <- median(1961:1990)
+m_y4 <- median(1991:2015)
+m_y <- c(m_y1, m_y2, m_y3, m_y4)
+
+#measure the covariance
+cov(df_ker_30y$Winter, m_y) #-85.13333
+cov(df_ker_30y$Spring, m_y) #-51.63104
+cov(df_ker_30y$Summer, m_y) #-635.8754
+cov(df_ker_30y$Autumn, m_y) #-127.9531
+#all the seasons show a negative linear dependence in respect to the periods
+
+#calculate the coefficient of correlation to measure and compare the strength
+# of the linear association between the seasonal precipitations and the periods
+cor(m_y, df_ker_30y[ , 2:5])
+#the coefficients are all negative: when one variable increases, the other decreases
+#the coefficients are small for spring and autumn, describing a weak correlation between the variables,
+# while the ones for winter and summer show a strong correlation
