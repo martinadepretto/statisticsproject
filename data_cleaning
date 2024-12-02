@@ -1,0 +1,51 @@
+#loading the necessary packages
+library(readxl)
+
+###Data cleaning####
+
+#data import
+raintab<-read.csv("/Users/marti/OneDrive/Documenti/R project 2024/statistics project/rainfall_India 1901-2015 (intero dataset originale).csv")
+View(raintab)
+
+#let's delete the variables not necessary for the analysis
+raintab <- raintab[-1,-c(15:19)]
+
+#let's rename the variables
+names(raintab) <- c("state", "year", "jan", "feb", "mar", "apr", "may", "jun",
+                     "jul", "aug", "sep", "oct", "nov", "dec")
+#first look at the data
+summary(raintab) #i dati dei mesi sono classe character, ma dovrebbero essere numeral (DOBBIAMO CAMBIARE O CANCELLARE LE ULTIME COLONNE?????)
+str(raintab)
+
+#let's change the class of the month variables, from character to numerical
+raintab$jan <- as.numeric(raintab$jan)
+raintab$jan <- as.numeric(raintab$jan)
+raintab$feb <- as.numeric(raintab$feb)
+raintab$mar <- as.numeric(raintab$mar)
+raintab$apr <- as.numeric(raintab$apr)
+raintab$may <- as.numeric(raintab$may)
+raintab$jun <- as.numeric(raintab$jun)
+raintab$jul <- as.numeric(raintab$jul)
+raintab$aug <- as.numeric(raintab$aug)
+raintab$sep <- as.numeric(raintab$sep)
+raintab$oct <- as.numeric(raintab$oct)
+raintab$nov <- as.numeric(raintab$nov)
+raintab$dec <- as.numeric(raintab$dec)
+raintab$year <- as.numeric(raintab$year)
+#some NAs have been introduced due to missing data
+
+#let's check 
+summary(raintab)
+
+#let's create a new data set by selecting only the values referring to the states of Jammu & Kashmir and Kerala
+raindata <- as.data.frame(raintab[raintab$state %in% c("JAMMU & KASHMIR","KERALA"),])
+View(raindata)
+
+#first look at the data
+str(raindata)
+summary(raindata)
+
+#Export the cleaned data set
+write.csv(raindata, "raindata_clean.csv", row.names = TRUE)
+
+#during the descriptive statistics analysis we will consider the data of the two states separately
