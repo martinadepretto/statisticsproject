@@ -1,0 +1,365 @@
+library(reshape2)
+library(ggplot2)
+
+#####BIVARIATE ANALYSIS JAMMU & KASHMIR####
+
+##ASSOCIATION BETWEEN MONTHLY PRECIPITATION AND YEARS##
+#Let's classify the monthly precipitations separately in 5 classes,
+#through the values of median, max, min, first and third quartile
+#january
+plot(jk$jan)
+sort(jk$jan)
+#As we see, outliers are present and easily spotted
+#While choosing the threshold's values, we should not consider the outliers,
+#as they risk to disrupt the classification
+summary(jk$jan[-which(jk$jan > 250)])
+class_jk_jan <- as.factor(ifelse(jk$jan < 28, "verylow", 
+                                  ifelse(jk$jan < 72, "low", 
+                                         ifelse(jk$jan < 107, "medium", 
+                                                ifelse(jk$jan < 186, "high", "veryhigh")))))
+class_jk_jan <- factor(class_jk_jan, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#february
+plot(jk$feb)
+sort(jk$feb)
+summary(jk$feb[-which(jk$feb > 350)])
+class_jk_feb <- as.factor(ifelse(jk$feb < 37, "verylow", 
+                                  ifelse(jk$feb < 83, "low", 
+                                         ifelse(jk$feb < 125, "medium", 
+                                                ifelse(jk$feb < 223, "high", "veryhigh")))))
+class_jk_feb <- factor(class_jk_feb, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#march
+plot(jk$mar)
+summary(jk$mar)
+class_jk_mar <- as.factor(ifelse(jk$mar < 47, "verylow", 
+                                  ifelse(jk$mar < 100, "low", 
+                                         ifelse(jk$mar < 145, "medium", 
+                                                ifelse(jk$mar < 258, "high", "veryhigh")))))
+class_jk_mar <- factor(class_jk_mar, levels = c("verylow", "low", "medium", "high", "veryhigh"))
+class_jk_mar
+#april
+plot(jk$apr)
+summary(jk$apr)
+class_jk_apr <- as.factor(ifelse(jk$apr < 33, "verylow", 
+                                  ifelse(jk$apr < 73, "low", 
+                                         ifelse(jk$apr < 103, "medium", 
+                                                ifelse(jk$apr < 176, "high", "veryhigh")))))
+class_jk_apr <- factor(class_jk_apr, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#may
+plot(jk$may)
+sort(jk$may)
+summary(jk$may[-which(jk$may > 200)])
+class_jk_may <- as.factor(ifelse(jk$may < 22, "verylow", 
+                                  ifelse(jk$may < 51, "low", 
+                                         ifelse(jk$may < 76, "medium", 
+                                                ifelse(jk$may < 122, "high", "veryhigh")))))
+class_jk_may <- factor(class_jk_may, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#june
+plot(jk$jun)
+sort(jk$jun)
+summary(jk$jun[-which(jk$jun > 180)]) 
+class_jk_jun <- as.factor(ifelse(jk$jun < 22, "verylow", 
+                                  ifelse(jk$jun < 50, "low", 
+                                         ifelse(jk$jun < 70, "medium", 
+                                                ifelse(jk$jun < 118, "high", "veryhigh")))))
+class_jk_jun <- factor(class_jk_may, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#july
+plot(jk$jul)
+sort(jk$jul)
+#NA values are present, so we need to remove them during the classification
+summary(jk$jul[-which(is.na(jk$jul))])
+class_jk_jul <- as.factor(ifelse(jk$jul < 97, "verylow", 
+                                  ifelse(jk$jul < 145, "low", 
+                                         ifelse(jk$jul < 187, "medium", 
+                                                ifelse(jk$jul < 333, "high", "veryhigh")))))
+class_jk_jul <- factor(class_jk_jul, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#august
+plot(jk$aug)
+sort(jk$aug)
+summary(jk$aug[-which(jk$aug > 400)])
+class_jk_aug <- as.factor(ifelse(jk$aug < 89, "verylow", 
+                                  ifelse(jk$aug < 153, "low", 
+                                         ifelse(jk$aug < 198, "medium", 
+                                                ifelse(jk$aug < 283, "high", "veryhigh")))))
+class_jk_aug <- factor(class_jk_aug, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#september
+plot(jk$sep)
+sort(jk$sep)
+summary(jk$sep[-which(jk$sep > 250)]) 
+class_jk_sep <- as.factor(ifelse(jk$sep < 25, "verylow", 
+                                  ifelse(jk$sep < 52, "low", 
+                                         ifelse(jk$sep < 84, "medium", 
+                                                ifelse(jk$sep < 173, "high", "veryhigh")))))
+class_jk_sep <- factor(class_jk_sep, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#october
+plot(jk$oct)
+sort(jk$oct)
+summary(jk$oct[-which(jk$oct > 150)]) 
+class_jk_oct <- as.factor(ifelse(jk$oct < 6, "verylow", 
+                                  ifelse(jk$oct < 17, "low", 
+                                         ifelse(jk$oct < 34, "medium", 
+                                                ifelse(jk$oct < 90, "high", "veryhigh")))))
+class_jk_oct <- factor(class_jk_oct, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#november
+plot(jk$nov)
+sort(jk$nov)
+#in this case there are both outliers and NA values
+which.max(jk$nov)
+which(is.na(jk$nov)) 
+summary(jk$nov[-c(86, 109)]) 
+class_jk_nov <- as.factor(ifelse(jk$nov < 1, "verylow", 
+                                  ifelse(jk$nov < 8, "low", 
+                                         ifelse(jk$nov < 24, "medium", 
+                                                ifelse(jk$nov < 68, "high", "veryhigh")))))
+class_jk_nov <- factor(class_jk_nov, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+#december
+plot(jk$dec)
+sort(jk$dec)
+which(jk$dec > 150)
+which(is.na(jk$dec))
+summary(jk$dec[-c(21, 29, 85, 86, 90, 94, 109)]) 
+class_jk_dec <- as.factor(ifelse(jk$dec < 10, "verylow", 
+                                  ifelse(jk$dec < 30, "low", 
+                                         ifelse(jk$dec < 58, "medium", 
+                                                ifelse(jk$dec < 106, "high", "veryhigh")))))
+class_jk_dec <- factor(class_jk_dec, 
+                       levels = c("verylow", "low", "medium", "high", "veryhigh"))
+
+
+#create a data frame with the classification of each monthly precipitations, 
+#linking them with the years in which they happened
+class_jk <- data.frame(jk$year, class_jk_jan, class_jk_feb, class_jk_mar, class_jk_apr,
+                        class_jk_may, class_jk_jun, class_jk_jul, class_jk_aug, class_jk_sep,
+                        class_jk_oct, class_jk_nov, class_jk_dec)
+#change the columns' name
+names(class_jk) <- c("year", "jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec")
+View(class_jk)
+
+
+#Create the contingency table with the absolute frequencies of the classes
+# to do so, we need to reunite the data in just 3 columns: year, month, level
+class_jk_long <- reshape2::melt(class_jk, id.vars = "year", variable.name = "month", value.name = "level")
+#create the contingency table
+jk_ct <- table(class_jk_long$year, class_jk_long$level)
+#arrange the columns in an increasing order
+ord_col <- c("verylow", "low", "medium", "high", "veryhigh")
+jk_ct[ , ord_col]
+# Convert the table into a data frame, to better visualize the absolute frequencies
+df_jk_ct <- as.data.frame.matrix(jk_ct[ , ord_col])
+View(df_jk_ct)
+
+#Through the contingency table, we can calculate the chi square and the Cramer's V Index,
+#to determine the level of association between the variables
+#Measure the chi square
+chisq.test(df_jk_ct)
+jk_chi <- 594.95
+#high value, the variables are associated
+
+#Measure the Cramer's V Index
+#to do that, we need the number of rows and columns, 
+# and the total number of observations
+r_jk <- nrow(df_jk_ct)
+c_jk <- ncol(df_jk_ct)
+n_jk <- 115*12
+#calculate Cramer's V Index
+jk_cramer <- sqrt(jk_chi/(n_jk*min(r_jk-1, c_jk-1))) #0.3282999
+#medium-low value, the variables are slightly associated
+
+
+#Let's find the years characterized by extreme events of precipitations, both low and high
+#Years with really poor rainfall
+#to do that, we need to add a column cointaining the years from 1901 to 2015,
+# to associate them with the values of df_jk_ct
+df_jk_ct$year <- jk$year 
+#now, we identify the years which frequency of "very low" and "low" classes is above 7
+df_jk_ct$year[which(df_jk_ct$verylow + df_jk_ct$low > 7)] 
+#These years represent periods in which it rained very little
+
+#Years with really intense rainfall
+#we identify the years which frequency of "very high" and "high" classes is above 7
+df_jk_ct$year[which(df_jk_ct$veryhigh + df_jk_ct$high > 7)] 
+#These years represent periods in which it rained plenty
+
+###########################################################
+#ASSOCIATION BETWEEN SEASONAL PRECIPITATIONS AND YEARS
+#The analysis is carried out by studying the years in periods of 30 years each,
+#and the seasons as the mean seasonal precipitations of those periods
+#The seasons were divided in: winter (January+February), 
+#                             spring (March+April+May), 
+#                             summer(June+July+August+September), 
+#                             autumn(October+November+December)
+#The years were divided in: y1 (1901-1930), 
+#                           y2 (1931-1960), 
+#                           y3 (1961-1990), 
+#                           y4 (1991-2015)
+
+View(jk)
+#Calculate the seasonal mean of the precipitations, for each period
+#winter (January+February)
+##y1 
+jk_winter_y1 <- round(mean(c(jk[1:30, 2], jk[1:30, 3])), digits = 3)
+##y2 
+jk_winter_y2 <- round(mean(c(jk[31:60, 2], jk[31:60, 3])), digits = 3)
+##y3 
+jk_winter_y3 <- round(mean(c(jk[61:90, 2], jk[61:90, 3])), digits = 3)
+##y4 
+jk_winter_y4 <- round(mean(c(jk[91:115, 2], jk[91:115, 3])), digits = 3)
+
+#spring (March+April+May)
+##y1 
+jk_spring_y1 <- round(mean(c(jk[1:30, 4], jk[1:30, 5], jk[1:30, 6])), digits = 3)
+##y2
+jk_spring_y2 <- round(mean(c(jk[31:60, 4], jk[31:60, 5], jk[31:60, 6])), digits = 3)
+##y3
+jk_spring_y3 <- round(mean(c(jk[61:90, 4], jk[61:90, 5], jk[61:90, 6])), digits = 3)
+##y4
+jk_spring_y4 <- round(mean(c(jk[91:115, 4], jk[91:115, 5], jk[91:115, 6])), digits = 3)
+
+#summer (June+July+August+September)
+##y1 
+jk_summer_y1 <- round(mean(c(jk[1:30, 7], jk[1:30, 8], jk[1:30, 9], jk[1:30, 10])), digits = 3)
+##y2
+jk_summer_y2 <- round(mean(c(jk[31:60, 7], jk[31:60, 8], jk[31:60, 9], jk[31:60, 10])), digits = 3)
+##y3
+jk_summer_y3 <- round(mean(c(jk[61:90, 7], jk[61:90, 8], jk[61:90, 9], jk[61:90, 10])), digits = 3)
+##y4
+jk_summer_y4 <- round(mean(c(jk[91:115, 7], jk[91:115, 8], jk[91:115, 9], jk[91:115, 10]), na.rm = TRUE), digits = 3)
+
+#autumn (October+November+December)
+##y1 
+jk_autumn_y1 <- round(mean(c(jk[1:30, 11], jk[1:30, 12], jk[1:30, 13])), digits = 3)
+##y2
+jk_autumn_y2 <- round(mean(c(jk[31:60, 11], jk[31:60, 12], jk[31:60, 13])), digits = 3)
+##y3
+jk_autumn_y3 <- round(mean(c(jk[61:90, 11], jk[61:90, 12], jk[61:90, 13])), digits = 3)
+##y4
+jk_autumn_y4 <- round(mean(c(jk[91:115, 11], jk[91:115, 12], jk[91:115, 13]), na.rm = TRUE), digits = 3)
+
+#create the data frame that puts together the seasonal mean precipitations and the periods
+df_jk_30y <- data.frame("Years"= c("1901-1930","1931-1960","1961-1990","1991-2015"), 
+                         "Winter"= c(jk_winter_y1, jk_winter_y2, jk_winter_y3, jk_winter_y4),
+                         "Spring"= c(jk_spring_y1, jk_spring_y2, jk_spring_y3, jk_spring_y4),
+                         "Summer"= c(jk_summer_y1, jk_summer_y2, jk_summer_y3, jk_summer_y4),
+                         "Autumn"= c(jk_autumn_y1, jk_autumn_y2, jk_autumn_y3, jk_autumn_y4))
+
+#Let's visualize the data in a histogram 
+# to do so, we need to reunite the data in just 3 columns: year, season, value
+df_jk_30y_long <- reshape2::melt(df_jk_30y, id.vars = "Years", 
+                                 variable.name = "Season", value.name = "Value")
+write.csv(df_jk_30y_long, "30y_jk_season class.J&K.csv", row.names = TRUE)
+
+# Create the histogram
+ggplot(df_jk_30y_long, aes(x = Season, y = Value, fill = Years)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(title = "Seasonal mean Prec. every 30 years in J&K", 
+       x = "Season", y = "Seasonal mean prec (mm)") +
+  theme_minimal()
+
+
+#CLASSIFICATION
+#Now, we can classify the seasonal mean precipitations in 2 classes,
+# choosing the median as the threshold
+#winter
+summary(df_jk_30y$Winter)
+class_jk_winter <- as.factor(ifelse(df_jk_30y$Winter < 110, "lower",
+                                     "higher"))
+class_jk_winter <- factor(class_jk_winter, levels = c("lower", "higher"))
+#spring
+summary(df_jk_30y$Spring)
+class_jk_spring <- as.factor(ifelse(df_jk_30y$Spring < 96, "lower",
+                                     "higher"))
+class_jk_spring <- factor(class_jk_spring, levels = c("lower", "higher"))
+#summer
+summary(df_jk_30y$Summer)
+class_jk_summer <- as.factor(ifelse(df_jk_30y$Summer < 129, "lower",
+                                     "higher"))
+class_jk_summer <- factor(class_jk_summer, levels = c("lower", "higher"))
+#autumn
+summary(df_jk_30y$Autumn)
+class_jk_autumn <- as.factor(ifelse(df_jk_30y$Autumn < 36, "lower",
+                                     "higher"))
+class_jk_autumn <- factor(class_jk_autumn, levels = c("lower", "higher"))
+
+#create a data frame with the classification of each seasonal precipitations, 
+# linking them with the periods in which they happened
+y30 <- c("1901-1930", "1931-1960", "1961-1990", "1991-2015")
+class_jk_y30 <- data.frame(y30, class_jk_winter, class_jk_spring, class_jk_summer, class_jk_autumn)
+#change the columns' name
+names(class_jk_y30) <- c("Period", "Winter", "Spring", "Summer", "Autumn")
+View(class_jk_y30)
+
+
+#Create the contingency table with the absolute frequencies of the classes
+# to do so, we need to reunite the data in just 3 columns: period, season, level
+class_jk_30y_long <- reshape2::melt(class_jk_y30, id.vars = "Period", 
+                                    variable.name = "Season", value.name = "Level")
+#create the contingency table
+jk_ct_30y <- table(class_jk_30y_long$Period, class_jk_30y_long$Level)
+# Convert the table into a data frame, to better visualize the absolute frequencies
+df_jk_ct_30y <- as.data.frame.matrix(jk_ct_30y)
+View(df_jk_ct_30y)
+#the priod from 1931 to 1960 recorded a decreasing in the seasonal mean precipitations,
+# while the one from 1991 to 2015 registered a rise
+
+#Through the contingency table, we can calculate the chi square,
+#to determine the level of association between the variables
+#Measure the chi square
+chisq.test(df_jk_ct_30y)
+jk_30y_chi <- 2
+#value different from zero, the variables are associated
+#Measure the Cramer's V Index
+#to do that, we need the number of rows and columns, 
+# and the total number of observations
+r_jk_30y <- nrow(df_jk_ct_30y)
+c_jk_30y <- ncol(df_jk_ct_30y)
+n_jk_30y <- 4*4
+#calculate Cramer's V Index
+jk_30y_cramer <- sqrt(jk_30y_chi/(n_jk_30y*min(r_jk_30y-1, c_jk_30y-1))) #0.3535534
+#medium-low value, the variables are slightly associated 
+
+
+#As the variables "seasonal mean precipitation" and "periods of 30 years each" are associated in a way,
+# we are interested in analyzing if the association could be linear
+#Measure the covariance to find a linear association
+#As the two variables have different lengths, 
+# we calculate the covariance between the seasonal mean precipitations 
+# and the median of each period
+#calculate the median of the periods
+m_y1 <- median(1901:1930)
+m_y2 <- median(1931:1960)
+m_y3 <- median(1961:1990)
+m_y4 <- median(1991:2015)
+m_y <- c(m_y1, m_y2, m_y3, m_y4)
+#measure the covariance between the mean precipitations of each season for every periods
+# and the medians of the periods
+cov(df_jk_30y$Winter, m_y) #166.7002
+cov(df_jk_30y$Spring, m_y) #249.5367
+cov(df_jk_30y$Summer, m_y) #117.9165
+cov(df_jk_30y$Autumn, m_y) #18.16792
+#all the seasons show a positive linear dependence in respect to the periods
+
+#calculate the coefficient of correlation to measure and compare the strength
+# of the linear association between the seasonal precipitations and the periods 
+cor(m_y, df_jk_30y[ , 2:5])
+#the coefficients are all positive: when one variable increases, the other increases too
+#the coefficients are small for every seasons, describing a weak correlation between the variables,
+# except for the spring's coefficient, that show a moderate correlation
