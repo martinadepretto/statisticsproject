@@ -1,0 +1,210 @@
+####DESCRIPTIVE STATISTICS KERALA####
+
+raindata <- read.csv("raindata_clean.csv")
+View(raindata) 
+#Select the data regarding Kerala state
+kerala <- raindata[raindata$state=="KERALA",-c(1,2)]
+View(kerala)
+write.csv(kerala, "Kerala data.csv", row.names = TRUE)
+
+####ANALYZING THE DATA CONSIDERING THE MEAN MONTHLY PRECIPITATIONS####
+#select the data of each month and calculate the mean
+ker_jan <- kerala[ ,2]
+ker_jan_mean <- round(mean(ker_jan), digits = 3)
+
+ker_feb <- kerala[ ,3]
+ker_feb_mean <- round(mean(ker_feb), digits = 3)
+
+ker_mar <- kerala[ ,4]
+ker_mar_mean <- round(mean(ker_mar), digits = 3)
+
+ker_apr <- kerala[ ,5]
+ker_apr_mean <- round(mean(ker_apr), digits = 3)
+
+ker_may <- kerala[ ,6]
+ker_may_mean <- round(mean(ker_may), digits = 3)
+
+ker_june <- kerala[ ,7]
+ker_june_mean <- round(mean(ker_june), digits = 3)
+
+ker_july <- kerala[ ,8]
+ker_july_mean <- round(mean(ker_july), digits = 3)
+
+ker_aug <- kerala[ ,9]
+ker_aug_mean <- round(mean(ker_aug), digits = 3)
+
+ker_sep <- kerala[ ,10]
+ker_sep_mean <- round(mean(ker_sep), digits = 3)
+
+ker_oct <- kerala[ ,11]
+ker_oct_mean <- round(mean(ker_oct), digits = 3)
+
+ker_nov <- kerala[ ,12]
+ker_nov_mean <- round(mean(ker_nov), digits = 3)
+
+ker_dec <- kerala[ ,13]
+ker_dec_mean <- round(mean(ker_dec), digits = 3)
+
+#create a dataframe using the average precipitations of every month
+#by using a vector containing the 12 mean monthly precipitations 
+#and a vector of the months' names
+ker_monthly_mean <- c(ker_jan_mean, ker_feb_mean, 
+                      ker_mar_mean, ker_apr_mean, ker_may_mean, 
+                      ker_june_mean, ker_july_mean, ker_aug_mean, ker_sep_mean, 
+                      ker_oct_mean, ker_nov_mean, ker_dec_mean)
+month <- month.name
+df_ker_month <- data.frame("Month"=month, "Average Prec"=ker_monthly_mean)
+View(df_ker_month)
+write.csv(df_ker_month, "Kerala monthly avarage precipitations.csv", row.names = TRUE) 
+
+#build a barplot using the dataframe above
+barplot(df_ker_month$Average.Prec, names.arg = df_ker_month$Month,
+        main = "Monthly Average Precipitation in Kerala", 
+        xlab = "Months", 
+        ylab = "Monthly average prec (mm)", ylim = c(0, 700),
+        cex.axis = 0.75, cex.names = 0.75, cex.lab = 1.25, cex.main = 1.3,
+        col= "indianred")
+#the pattern of the precipitations reflects the occurrence of monsoons during summer;
+#whereas the other season are affected by weaker precipitations
+
+#Is the distribution of the monthly average precipitation a normal one?
+shapiro.test(df_ker_month$Average.Prec) 
+#p-value = 0.05152
+#Since p_value > 0.05, the distribution is considered normal
+
+#Descriptive analysis of the monthly avarage precipitations
+#let's overview the data rapidly
+summary(df_ker_month$Average.Prec) 
+#and now more in detail
+max(df_ker_month$Average.Prec) # 700.953
+max_month_ker <- max(df_ker_month$Average.Prec)
+which.max(df_ker_month$Average.Prec) # 7
+df_ker_month$Month[7] # "July"
+#the month during which it rains more on average is July in the Kerala state (700.953mm)
+#in accordance with the annual pattern
+
+min(df_ker_month$Average.Prec) # 12.247
+min_month_ker <- min(df_ker_month$Average.Prec)
+which.min(df_ker_month$Average.Prec) # 1
+df_ker_month$Month[1] # "January"
+#the month during which it rains less on average is January in the Kerala state (12.247mm)
+#in accordance with the typical seasoning of the state
+
+max(df_ker_month$Average.Prec) - min(df_ker_month$Average.Prec) # 688.706
+range_month_ker <- max(df_ker_month$Average.Prec) - min(df_ker_month$Average.Prec) 
+#the range of the data is 688.706mm
+
+#calculate the median as the central value of the monthly average precipitations
+median(df_ker_month$Average.Prec) # 196.721
+median_month_ker <- median(df_ker_month$Average.Prec) #median = 196.721mm
+
+#calculate the first quartile
+quantile(df_ker_month$Average.Prec, 0.25) # 39.16625 
+Q1_month_ker <- quantile(df_ker_month$Average.Prec, 0.25)
+#calculate the third quartile
+quantile(df_ker_month$Average.Prec, 0.75) # 326.0865 
+Q3_month_ker <- quantile(df_ker_month$Average.Prec, 0.75)
+#or we can calculate the quartiles with this function
+quantile(df_ker_month$Average.Prec)
+
+#boxplot of the data 
+boxplot(df_ker_month$Average.Prec, ylab = "Monthly average Prec. (mm)", 
+        main = "Monthly Average Prec. in Kerala")
+#the distribution is slightly negatively skewed because the median is closer to the third quartile
+
+#calculate the variance
+var(df_ker_month$Average.Prec) # 56936.58
+var_month_ker <- var(df_ker_month$Average.Prec) 
+#calculate the standard deviation
+sd(df_ker_month$Average.Prec) # 238.6139
+sd_month_ker <- sd(df_ker_month$Average.Prec)
+#the data are very heterogeneous and deviate from their mean on average by 238.6139
+
+#generate a table with the recently calculated values
+month_ker_values <- data.frame(max_month_ker, min_month_ker, range_month_ker, median_month_ker, var_month_ker, sd_month_ker)
+View(month_ker_values)
+write.csv(month_ker_values, "parameters month mean k.csv", row.names = TRUE)
+
+
+
+####STUDYING THE DATA CONSIDERING THE YEAR CUMULATIVE PRECIPITATIONS####
+#create a new data frame reporting the cumulative precipitations of each year
+df_cum_ker <- data.frame("year" =kerala$year, "cum_prec"= rowSums(kerala[,-1]))
+View(df_cum_ker)
+write.csv(df_cum_ker, "Kerala cumulative annual precipitation.csv", row.names = TRUE) 
+summary(df_cum_ker)
+
+#build a plot to visualize the data frame above
+plot(df_cum_ker$year, df_cum_ker$cum_prec, type = "l", main = "Cumulative prec. Kerala", 
+     xlab = "Years", ylab = "cumulative precipitation (mm)", ylim = c(2000, 4500),
+     cex.axis = 0.75, cex.names = 0.75, cex.lab = 1.25, cex.main = 1.5)
+#the pattern seems pretty constant, if not slightly decreasing
+
+#Descriptive analysis of the cumulative annual precipitations
+#let's overview the data rapidly
+summary(df_cum_ker$cum_prec)
+#and now more in detail
+max(df_cum_ker$cum_prec) #4257.9
+max_cum_ker <- max(df_cum_ker$cum_prec) 
+which.max(df_cum_ker$cum_prec) #61
+df_cum_ker$year[61] #1961
+#the year with the most intense rainfall was 1961 in Kerala region (4257.9mm)
+
+min(df_cum_ker$cum_prec) #2068.8
+min_cum_ker <- min(df_cum_ker$cum_prec) 
+which.min(df_cum_ker$cum_prec) #76
+df_cum_ker$year[76] #1976
+#the year with the less intense rainfall was 1976 in Kerala region (2068.8mm)
+
+max_cum_ker - min_cum_ker #2189.1
+range_cum_ker <- max_cum_ker - min_cum_ker
+#the range of the data is 2189.1mm
+
+#calculate the median of the annual cumulative precipitations in Kerala
+median(df_cum_ker$cum_prec) #2937.5
+median_cum_ker <- median(df_cum_ker$cum_prec)
+
+#calculate the first quartile
+quantile(df_cum_ker$cum_prec, 0.25) # 2627.95
+Q1_cum_ker <- quantile(df_cum_ker$cum_prec, 0.25)
+#calculate the third quartile
+quantile(df_cum_ker$cum_prec, 0.75) # 3164.05
+Q3_cum_ker <- quantile(df_cum_ker$cum_prec, 0.75)
+#or we can calculate the quartiles directly with this function
+quantile(df_cum_ker$cum_prec)
+
+#Boxplot of the cumulative precipitations
+##it's not as easy as before because there are outliners
+##to not visualize the outliners in the plot, we have to modify the limits
+#Calculate the new limits 
+IQR_cum_ker <- Q3_cum_ker - Q1_cum_ker
+# Calcolare i limiti 
+lower_limit_cum_ker <- Q1_cum_ker - 1.5 * IQR_cum_ker
+upper_limit_cum_ker <- Q3_cum_ker + 1.5 * IQR_cum_ker
+# Sostituire gli outliers con i limiti
+data_adjusted_cum_ker <- ifelse(df_cum_ker$cum_prec < lower_limit_cum_ker, lower_limit_cum_ker,
+                        ifelse(df_cum_ker$cum_prec > upper_limit_cum_ker, 
+                               upper_limit_cum_ker, df_cum_ker$cum_prec))
+boxplot(data_adjusted_cum_ker, ylab = "Cumulative Prec. (mm)", main = "Cumulative Prec. in Kerala")
+#the distribution is slightly negatively skewed because the median is closer to the third quartile
+
+#calculate the variance
+var(df_cum_ker$cum_prec) # 178178
+var_cum_ker <- var(df_cum_ker$cum_prec) 
+#calculate the standard deviation
+sd(df_cum_ker$cum_prec) #422.1113
+sd_cum_ker <- sd(df_cum_ker$cum_prec)
+#the data are very heterogeneous and deviate from their mean on average by 422.1113
+
+#generate a table with the recently calculated values
+cum_ker_values <- data.frame(max_cum_ker, min_cum_ker, range_cum_ker, median_cum_ker, var_cum_ker, sd_cum_ker)
+View(cum_ker_values)
+write.csv(cum_ker_values, "parameters cumulative prec.k.csv", row.names = TRUE)
+
+#let's obtain the percentage of precipitation during summer over the total cumulative precipitation
+sum(df_cum_ker$cum_prec)
+#select the data regarding the summer precipitation using June, July, August, September columns
+sum(kerala[ , 7:10])
+#calculate the percentage
+sum(kerala[ , 7:10]) / sum(df_cum_ker$cum_prec)
+#The percentage precipitation occurring in summer are the 69% of the total annual precipitation
