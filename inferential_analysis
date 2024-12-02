@@ -1,0 +1,231 @@
+####Inferential analysis####
+
+
+#in this analysis the most and least rainy seasons of the two states will be considered
+#seasonal precipitation trends will be analyzed using simple linear regression techniques.
+#then,if possible, a precipitation forecast will be made for the year 2050.
+
+####Jammu & Kashmir####
+#Let's import the clean Jammu & Kashmir data set
+jk <- read.csv("J&K data.csv")
+str(jk)
+
+#From the descriptive analysis it was found that in the state of Jammu & Kashmir 
+#the rainiest season is summer (June, July, August and September)
+#the least rainy season is autumn (October, November and December)
+
+###Summer J&K (June+July+August+September)####
+#Let's create a new dataset that reports the cumulative summer precipitation for each year
+sum_cum_jk <- rowSums(jk[, c(8,9,10,11)])
+
+jk_summer <- data.frame(jk$year, sum_cum_jk)
+View(jk_summer)
+#Scatterplot of data
+plot(jk_summer$jk.year, jk_summer$sum_cum_jk,
+     main= "Scatterplot of summer data", 
+     xlab = "Years", ylab = "Summer precipitation (mm)")
+#no patterns are evident from this plot
+
+#let's apply a linear regression model to model the relationship between 
+#year (independent variable) 
+#summer precipitation (dependent variable).
+model_sum_jk <- lm(jk_summer$sum_cum_jk ~ jk_summer$jk.year)
+
+#To find the coefficients
+coefficients(model_sum_jk)
+#slope = 0.4274 the model predicts a slight increase in summer rainfall in J&K over time
+
+#predicted values by the model
+fitted.values(model_sum_jk)
+
+#The residuals are
+residuals(model_sum_jk)
+
+#Plot of the residuals
+plot(model_sum_jk$residuals, main= "Scatterplot of residuals", ylab = "Residuals")
+abline(h=0, col='indianred', lwd=2)
+
+mean(model_sum_jk$residuals) #4.736952e-15 the residues are evenly distributed
+
+#Histrogram of residuals
+hist(model_sum_jk$residuals, freq=F, col = "mintcream") 
+abline(v=0, lwd = 2, col="cadetblue")
+lines(density(model_sum_jk$residuals), lwd=2)
+#overlap the normal distribution
+curve(dnorm(x, mean=0, sd=sd(model_sum_jk$residuals)), add = T, col="indianred", lwd=2)
+
+colors()
+
+summary(model_sum_jk) 
+#R-squared: 0.008752468
+#The linear regression model explains only 0.875% of the variability of the dependent variable through the independent variable
+#p-value: 0.3221 the coefficient is not statistically significant 
+
+#Due to the fact that no linear dependence was found between the two variables, it is not possible to make predictions using this model
+
+###Autumn J&K (October+November+December)####
+#Let's create a new dataset that reports the cumulative autumn precipitation for each year
+jk[, c(12,13,14)]
+aut_cum_jk <- rowSums(jk[, c(12,13,14)])
+jk_autumn <- data.frame(jk$year, aut_cum_jk)
+View(jk_autumn)
+
+#Scatterplot of data
+plot(jk_autumn$jk.year, jk_autumn$aut_cum_jk,
+     main= "Scatterplot of autumn data", 
+     xlab = "Years", ylab = "Autumn precipitation (mm)")
+#no patterns are evident from this plot
+
+#let's apply a linear regression model to model the relationship between 
+#year (independent variable) 
+#autumn precipitation (dependent variable)
+model_aut_jk <- lm(jk_autumn$aut_cum_jk ~ jk_autumn$jk.year)
+
+#To find the coefficients
+coefficients(model_aut_jk)
+#slope: 0.1948297 the model predicts a slight increase in autumn rainfall in J&K over time.
+
+#predicted values by the model
+fitted.values(model_aut_jk)
+
+#The residuals are
+residuals(model_aut_jk)
+
+#Plot of the residuals
+plot(model_aut_jk$residuals, main= "Scatterplot of residuals")
+abline(h=0, col='indianred', lwd=2)
+
+mean(model_aut_jk$residuals) #4.736952e-15 the residues are evenly distributed
+
+#Histrogram of residuals
+hist(model_aut_jk$residuals, freq=F, col="mintcream", ylim = c(0, 0.008), 
+     xlab = "Residuals", main = "Histogram of residuals")
+abline(v=0, lwd = 2, col="cadetblue")
+lines(density(model_aut_jk$residuals), lwd=2)
+#overlap the normal distribution
+curve(dnorm(x, mean=0, sd=sd(model_aut_jk$residuals)), add = T, col="indianred", lwd=2)
+
+summary(model_aut_jk) 
+#R-squared: 0.008325
+#The linear regression model explains only 0.832% of the variability of the dependent variable through the independent variable
+#p-value: 0.3343 the coefficient is not statistically significant 
+
+#Due to the fact that no linear dependence was found between the two variables, it is not possible to make predictions using this model
+
+####Kerala####
+#Let's import the clean Kerala data set
+kerala <- read.csv("Kerala data.csv")
+str(kerala)
+
+#From the descriptive analysis it was found that in the state of Kerala 
+#the rainiest season is summer (June, July, August and September)
+#the least rainy season is winter (January+February)
+
+###Summer Kerala (June+July+August+September)####
+kerala[, c(8,9,10,11)]
+sum_cum_ker <- rowSums(kerala[, c(8,9,10,11)])
+ker_summer <- data.frame(kerala$year, sum_cum_ker)
+View(ker_summer)
+#Scatterplot of data
+plot(ker_summer$kerala.year, ker_summer$sum_cum_ker,
+     main= "Scatterplot of summer data", 
+     xlab = "Years", ylab = "Summer precipitation (mm)")
+#no patterns are evident from this plot
+
+#let's apply a linear regression model to model the relationship between 
+#year (independent variable) 
+#summer precipitation (dependent variable).
+model_sum_k <- lm(ker_summer$sum_cum_ker ~ ker_summer$kerala.year)
+
+#To find the coefficients
+coefficients(model_sum_k)
+#slope=-2.182928 the model predicts an inverse relationship in autumn rainfall in Kerala over time
+
+#predicted values by the model
+model_sum_k$fitted.values
+fitted.values(model_sum_k)
+#calculation "by hand" of the predicted values
+model_sum_k$coefficients[1]+model_sum_k$coefficients[2]*ker_summer$kerala.year
+
+#The residuals are
+model_sum_k$residuals
+
+#Plot of the residuals
+plot(model_sum_k$residuals, main= "scatterplot of residuals")
+abline(h=0, col='indianred', lwd=2)
+
+mean(model_sum_k$residuals)
+#8.897231e-15 the residues are evenly distributed
+
+#Histrogram of residuals
+hist(model_sum_k$residuals, freq=F, col = "mintcream", ylim = c(0, 12e-04),
+     xlab = "Residuals", main = "Histogram of residuals")
+abline(v=0, lwd = 2, col="cadetblue")
+lines(density(model_sum_k$residuals), lwd=2)
+#overlap the normal distribution
+curve(dnorm(x, mean=0, sd=sd(model_sum_k$residuals)), add = T, col="indianred", lwd=2)
+
+summary(model_sum_k)
+#R-squared:  0.03551
+#The linear regression model explains only 3.551% of the variability of the dependent variable through the independent variable
+#p-value: 0.04372 the coefficient is statistically significant 
+
+#Making predictions
+#predict the summer precipitation for the year 2050
+model_sum_k$coefficients[1]+model_sum_k$coefficients[2]*2050
+p_2050 <- model_sum_k$coefficients[1]+model_sum_k$coefficients[2]*2050
+
+#the summer precipitation predicted for the 2050 in Kerala is equal to 1822.023
+
+#draw regression line on plot
+plot( ker_summer$kerala.year,  ker_summer$sum_cum_ker,
+      main= "Scatterplot of summer data", 
+      xlab = "Years", ylab = "Summer precipitation", xlim = c(1900,2050))
+abline(model_sum_k, col='indianred', lwd=2,)
+points(2050, p_2050, col = 'cadetblue', pch = 19, cex = 1.5)  
+abline(v = 2050, col = 'cadetblue', lwd = 2, lty = 2)
+
+###Winter Kerala (January+February)####
+kerala[, c(3,4)]
+win_cum_ker <- rowSums(kerala[, c(3,4)])
+ker_winter <- data.frame(kerala$year, win_cum_ker)
+View(ker_winter)
+
+#Scatterplot of data
+plot(ker_winter$kerala.year, ker_winter$win_cum_ker,
+     main= "Scatterplot of winter data", 
+     xlab = "Years", ylab = "Winter precipitation (mm)")
+#no patterns are evident from this plot
+
+#let's apply a linear regression model to model the relationship between 
+#year (independent variable) 
+#winter precipitation (dependent variable)
+model_win_k <- lm(ker_winter$win_cum_ker ~ ker_winter$kerala.year)
+
+#To find the coefficients
+coefficients(model_win_k)
+#slope= -0.1146343 the model predicts an inverse relationship in winter rainfall in Kerala over time
+
+#predicted values by the model
+fitted.values(model_win_k)
+
+#The residuals are
+residuals(model_win_k)
+
+#Plot of the residuals
+plot(model_win_k$residuals, main= "scatterplot of residuals")
+abline(h=0, col='indianred', lwd=2)
+mean(model_win_k$residuals)
+#1.884483e-15 the residues are evenly distributed
+
+#Histrogram of residuals
+hist(model_win_k$residuals, freq=F, col = "mintcream", xlab = "Residuals", main = "Histogram of residuals") 
+abline(v=0, lwd = 2, col="cadetblue")
+lines(density(model_win_k$residuals), lwd=2)
+#overlap the normal distribution
+curve(dnorm(x, mean=0, sd=sd(model_win_k$residuals)), add = T, col="indianred", lwd=2)
+
+summary(model_win_k)
+#R-squared:0.02922
+#The linear regression model explains only 2.922% of the variability of the dependent variable through the independent variable
+#p-value: 0.06775 the coefficient is not statistically significant 
