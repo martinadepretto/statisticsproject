@@ -1,0 +1,218 @@
+####DECRIPTIVE STATISTICS JAMMU & KASHMIR####
+
+raindata <- read.csv("raindata_clean.csv")
+View(raindata)
+#Select the data regarding J&K state
+jk <- raindata[raindata$state=="JAMMU & KASHMIR",-c(1,2)]
+View(jk)
+write.csv(jk, "J&K data.csv", row.names = TRUE)
+
+####ANALYZING THE DATA CONSIDERING THE MEAN MONTHLY PRECIPITATIONS####
+#select the data of each month and calculate the mean
+jk_jan <- jk[ ,2]
+jk_jan_mean <- round(mean(jk_jan), digits = 3)
+
+jk_feb <- jk[ ,3]
+jk_feb_mean <- round(mean(jk_feb), digits = 3)
+
+jk_mar <- jk[ ,4]
+jk_mar_mean <- round(mean(jk_mar), digits = 3)
+
+jk_apr <- jk[ ,5]
+jk_apr_mean <- round(mean(jk_apr), digits = 3)
+
+jk_may <- jk[ ,6]
+jk_may_mean <- round(mean(jk_may), digits = 3)
+
+jk_june <- jk[ ,7]
+jk_june_mean <- round(mean(jk_june), digits = 3) 
+
+jk_july <- jk[ ,8]
+jk_july_mean <- round(mean(jk_july, na.rm = TRUE), digits = 3) #use of na.rm to perform calculations without considering NA data
+
+jk_aug <- jk[ ,9]
+jk_aug_mean <- round(mean(jk_aug), digits = 3)
+
+jk_sep <- jk[ ,10]
+jk_sep_mean <- round(mean(jk_sep), digits = 3)
+
+jk_oct <- jk[ ,11]
+jk_oct_mean <- round(mean(jk_oct), digits = 3)
+
+jk_nov <- jk[ ,12]
+jk_nov_mean <- round(mean(jk_nov, na.rm = TRUE), digits = 3) 
+
+jk_dec <- jk[ ,13]
+jk_dec_mean <- round(mean(jk_dec, na.rm = TRUE), digits = 3) 
+
+#create a dataframe using the average precipitations of every month
+#by using a vector containing the 12 mean monthly precipitations 
+#and a vector of the months' names
+jk_monthly_mean <- c(jk_jan_mean, jk_feb_mean, 
+                      jk_mar_mean, jk_apr_mean, jk_may_mean, 
+                      jk_june_mean, jk_july_mean, jk_aug_mean, jk_sep_mean, 
+                      jk_oct_mean, jk_nov_mean, jk_dec_mean)
+month <- month.name
+df_jk_month <- data.frame("Month"=month, "Average Prec"=jk_monthly_mean)
+View(df_jk_month)
+write.csv(df_jk_month, "J&K monthly avarage precipitations.csv", row.names = TRUE) 
+
+#build a barplot using the dataframe above
+barplot(df_jk_month$Average.Prec, names.arg = df_jk_month$Month,
+        main = "Monthly Average Precipitation in J&K", 
+        xlab = "Months", 
+        ylab = "Monthly average prec (mm)", ylim = c(0, 200),
+        cex.axis = 0.75, cex.names = 0.75, cex.lab = 1.25, cex.main = 1.3,
+        col= "cadetblue")
+#the pattern of the precipitations reflects the occurrence of monsoons during summer,
+#and of the snowfall during winter; spring and autumn are seasons with weaker rainfalls
+
+#Is the distribution of the monthly average precipitation a normal one?
+shapiro.test(df_jk_month$Average.Prec) 
+#p-value = 0.05246
+#Since p_value > 0.05, the distribution is considered normal
+
+#Descpriptive analysis of the monthly average precipitations
+#let's overview the data rapidly
+summary(df_jk_month$Average.Prec) 
+#and now more in detail
+max(df_jk_month$Average.Prec) #180.973
+max_month_jk <- max(df_jk_month$Average.Prec)
+which.max(df_jk_month$Average.Prec) #8
+df_jk_month$Month[8] #"August"
+#the month during which it rains more on average is August in the J&K state (180.973mm).
+#in accordance with the typical seasoning of the state
+
+min(df_jk_month$Average.Prec) #24.133
+min_month_jk <- min(df_jk_month$Average.Prec)
+which.min(df_jk_month$Average.Prec) #11
+df_jk_month$Month[11] #"November"
+#the month during which it rains less on average is November in the J&K state (24.133mm)
+#in accordance with the typical seasoning of the state
+
+
+max_month_jk - min_month_jk #156.84
+range_month_jk <- max_month_jk - min_month_jk
+#the range of the data is 156.84mm 
+
+#calculate the median as the central value of the monthly average precipitations
+median(df_jk_month$Average.Prec) # 91.4965
+median_month_jk <- median(df_jk_month$Average.Prec) 
+
+#calculate the first quartile
+quantile(df_jk_month$Average.Prec, 0.25) # 62.0325
+Q1_month_jk <- quantile(df_jk_month$Average.Prec, 0.25)
+#calculate the third quartile
+quantile(df_jk_month$Average.Prec, 0.75) # 119.432
+Q3_month_jk <- quantile(df_jk_month$Average.Prec, 0.75)
+#or we can calculate the quantiles with this function
+quantile(df_jk_month$Average.Prec)
+
+#boxplot of the data 
+boxplot(df_jk_month$Average.Prec, ylab = "Monthly average Prec. (mm)",
+        main = "Monthly Average Prec. in J&K")
+#the distribution is slightly negatively skewed because the median is closer to the third quartile
+
+#calculate the variance
+var(df_jk_month$Average.Prec) # 2582.434
+var_month_jk <- var(df_jk_month$Average.Prec)
+#calculate the standard deviation
+sd(df_jk_month$Average.Prec) # 50.81766
+sd_month_jk <- sd(df_jk_month$Average.Prec)
+#the data are very heterogeneous and deviate from their mean on average by 50.81766
+
+#generate a table with the recently calculated values
+month_jk_values <- data.frame(max_month_jk, min_month_jk, range_month_jk, median_month_jk, var_month_jk, sd_month_jk)
+View(month_jk_values)
+write.csv(month_jk_values, "parameters month mean J&K.csv", row.names = TRUE)
+
+
+
+####STUDYING THE DATA CONSIDERING THE YEAR CUMULATIVE PRECIPITATIONS####
+#create a new data frame reporting the cumulative precipitations of each year
+df_cum_jk <- data.frame("year" =jk$year, "cum_prec"= rowSums(jk[,-1], na.rm = T))
+View(df_cum_jk)
+write.csv(df_cum_jk, "J&K cumulative annual precipitation.csv", row.names = TRUE) 
+
+#build a plot to visualize the data frame above
+plot(df_cum_jk$year, df_cum_jk$cum_prec, type = "l", main = "Cumulative prec. J&K", 
+     xlab = "Years", ylab = "Cum. prec. (mm)", ylim = c(600, 1800),
+     cex.axis = 0.75, cex.names = 0.75, cex.lab = 1.25, cex.main = 1.5)
+#the pattern seems pretty constant, except for the period from 1980 to 2000, 
+#where an increase seems to have happened
+
+#Descriptive analysis of the cumulative annual precipitations
+#let's overview the data rapidly
+summary(df_cum_jk$cum_prec)
+#and now more in detail
+max(df_cum_jk$cum_prec) # 1732.4
+max_cum_jk <- max(df_cum_jk$cum_prec) 
+which.max(df_cum_jk$cum_prec) # 94
+df_cum_jk$year[94] # 1994
+#the year with the most intense rainfall was 1994 in J&K region (1732.4mm)
+
+min(df_cum_jk$cum_prec) # 656.9
+min_cum_jk <- min(df_cum_jk$cum_prec) 
+which.min(df_cum_jk$cum_prec) # 70
+df_cum_jk$year[70] # 1970
+#the year with the less intense rainfall was 1970 in J&K region (656.9mm)
+
+max_cum_jk - min_cum_jk # 1075.5
+range_cum_jk <- max_cum_jk - min_cum_jk
+#the range of the data is 1075.5mm
+
+#calculate the median of the annual cumulative precipitations in J&K region
+median(df_cum_jk$cum_prec) # 1095.6
+median_cum_jk <- median(df_cum_jk$cum_prec)
+
+#calculate the first quartile
+quantile(df_cum_jk$cum_prec, 0.25) # 955 
+Q1_cum_jk <- quantile(df_cum_jk$cum_prec, 0.25)
+#calculate the third quartile
+quantile(df_cum_jk$cum_prec, 0.75) # 1254 
+Q3_cum_jk <- quantile(df_cum_jk$cum_prec, 0.75)
+#or we can calculate the quartiles directly with this function
+quantile(df_cum_jk$cum_prec)
+
+#Boxplot of the cumulative precipitations
+##it's not as easy as before because there are outliners
+##to not visualize the outliners in the plot, we have to modify the limits
+#Calculate the new limits
+IQR_cum_jk <- Q3_cum_jk - Q1_cum_jk
+lower_limit_cum_jk <- Q1_cum_jk - 1.5 * IQR_cum_jk
+upper_limit_cum_jk <- Q3_cum_jk + 1.5 * IQR_cum_jk
+#Set the new limits
+data_adjusted_cum_jk <- ifelse(df_cum_jk$cum_prec < lower_limit_cum_jk, lower_limit_cum_jk,
+                                ifelse(df_cum_jk$cum_prec > upper_limit_cum_jk, 
+                                       upper_limit_cum_jk, df_cum_jk$cum_prec))
+boxplot(data_adjusted_cum_jk, ylab = "Cumulative Prec. (mm)", main = "Cumulative Prec. in J&K")
+#the distribution is slightly positively skewed because the median is closer to the first quartile
+
+#calculate the variance
+var(df_cum_jk$cum_prec) # 56392.28
+var_cum_jk <- var(df_cum_jk$cum_prec) 
+#calculate the standard deviation
+sd(df_cum_jk$cum_prec) # 237.4706
+sd_cum_jk <- sd(df_cum_jk$cum_prec)
+#the data are very heterogeneous and deviate from their mean on average by 237.4706
+
+#generate a table with the recently calculated values
+cum_jk_values <- data.frame(max_cum_jk, min_cum_jk, range_cum_jk, median_cum_jk, var_cum_jk, sd_cum_jk)
+View(cum_jk_values)
+write.csv(cum_jk_values, "parameters cumulative prec.J&K.csv", row.names = TRUE)
+
+#let's obtain the percentage of precipitation during summer over the total cumulative precipitation
+sum(df_cum_jk$cum_prec)
+#select the data regarding the summer precipitation using June, July, August, September columns
+sum(jk[ , 7:10], na.rm = T)
+#calculate the percentage
+sum(jk[ , 7:10], na.rm = T) / sum(df_cum_jk$cum_prec)
+#The percentage precipitation occurring in summer are the 45% of the total annual precipitation
+
+#let's obtain the percentage of precipitation during winter over the total cumulative precipitation
+sum(df_cum_jk$cum_prec)
+#select the data regarding the summer precipitation using June, July, August, September columns
+sum(jk[ , 2:3])
+#calculate the percentage
+sum(jk[ , 2:3]) / sum(df_cum_jk$cum_prec)
+#The percentage precipitation occurring in summer are the 19% of the total annual precipitation
