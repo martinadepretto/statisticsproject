@@ -1,0 +1,54 @@
+library(gridExtra)
+library(ggplot2)
+
+#kerala VS jk
+
+#####Differences in monthly averages####
+df_ker_month <- read.csv("Kerala monthly avarage precipitations.csv")
+df_jk_month <- read.csv("J&K monthly avarage precipitations.csv")
+#let's find the limits of the datasets so that we can set the same scales
+y_max_mon <- max(df_ker_month$Average.Prec, df_jk_month$Average.Prec, na.rm = TRUE)
+#plot the two graphs together
+par(mfrow=c(1,2))
+barplot(df_jk_month$Average.Prec, names.arg = df_jk_month$Month,
+        main = "Monthly Average Precipitation in J&K", 
+        xlab = "Months", 
+        ylab = "Monthly average prec (mm)", ylim = c(0, y_max_mon),
+        cex.axis = 0.75, cex.names = 0.75, cex.lab = 1.25, cex.main = 1.3,
+        col= "cadetblue")
+barplot(df_ker_month$Average.Prec, names.arg = df_ker_month$Month,
+        main = "Monthly Average Precipitation in Kerala", 
+        xlab = "Months", 
+        ylab = "Monthly average prec (mm)", ylim = c(0, y_max_mon),
+        cex.axis = 0.75, cex.names = 0.75, cex.lab = 1.25, cex.main = 1.3,
+        col= "indianred")
+
+
+####Differences in cumulative annual precipitation####
+df_cum_ker <- read.csv("Kerala cumulative annual precipitation.csv")
+df_cum_jk <- read.csv("J&K cumulative annual precipitation.csv")
+#let's find the limits of the datasets so that we can set the same scales
+y_max_cum <- max(df_cum_ker$cum_prec, df_cum_jk$cum_prec, na.rm = TRUE)
+#plot the two graphs together
+par(mfrow=c(1,2))
+plot(df_cum_jk$year, df_cum_jk$cum_prec, type = "l", main = "Cumulative prec. J&K", 
+     xlab = "Years", ylab = "Cumulative precipitation (mm)", ylim = c(0, y_max_cum),
+     cex.axis = 0.75, cex.lab = 1.25, cex.main = 1.5)
+plot(df_cum_ker$year, df_cum_ker$cum_prec, type = "l", main = "Cumulative prec. Kerala", 
+     xlab = "Years", ylab = "Cumulative precipitation (mm)", ylim = c(0, y_max_cum),
+     cex.axis = 0.75, cex.lab = 1.25, cex.main = 1.5)
+dev.off()
+
+
+####Differences in mean seasonal precipitation over thirty-year periods####
+#visulize the graphs together
+grid.arrange(ggplot(df_jk_30y_long, aes(x = Season, y = Value, fill = Years)) +
+               geom_bar(stat = "identity", position = "dodge") +
+               labs(title = "Mean seasonal prec. every 30 years in jk", 
+               x = "Season", y = "Mean seasonal prec (mm)") +
+               theme_minimal() + ylim(0,550),
+             ggplot(df_ker_30y_long, aes(x = Season, y = Value, fill = Years)) +
+               geom_bar(stat = "identity", position = "dodge") +
+               labs(title = "Mean seasonal prec. every 30 years in Kerala", 
+               x = "Season", y = "Mean seasonal prec (mm)") +
+               theme_minimal() + ylim(0,550), ncol=2)
