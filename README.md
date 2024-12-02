@@ -1,4 +1,4 @@
-# statisticsproject
+# Statistics Project
 
 ## Professor Rosamarie Frieri
 
